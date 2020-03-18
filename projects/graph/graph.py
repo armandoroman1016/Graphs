@@ -92,13 +92,17 @@ class Graph:
 
 
 
-    def dft_recursive(self, starting_vertex, visited = set()):
+    def dft_recursive(self, starting_vertex, visited = None):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
 
         This should be done using recursion.
         """
+
+        # initializing set on first call
+        if visited == None:
+            visited = set()
 
         # Check if the node has been visited
         if not starting_vertex in visited:
@@ -147,16 +151,14 @@ class Graph:
                     # IF SO, RETURN THE PATH
                     return current_path
                 
-                else:
-                    # Enqueue A PATH TO all it's neighbors
-                    for neighbor in self.vertices[last_vert]:
-                        # MAKE A COPY OF THE PATH
-                        path_copy = current_path.copy()
-
-                        path_copy.append(neighbor)
-
-                        # ENQUEUE THE COPY
-                        queue.enqueue(path_copy)
+            
+                # Enqueue A PATH TO all it's neighbors
+                for neighbor in self.vertices[last_vert]:
+                    # MAKE A COPY OF THE PATH
+                    path_copy = current_path.copy()
+                    path_copy.append(neighbor)
+                    # ENQUEUE THE COPY
+                    queue.enqueue(path_copy)
 
     def dfs(self, starting_vertex, destination_vertex):
         """

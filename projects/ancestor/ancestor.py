@@ -1,13 +1,11 @@
-
 def earliest_ancestor(ancestors, starting_node):
-
-    # create a set for visited
-    visited = set()
 
     # create a dictionary with earliest ancestor/ set key to depth and value to idx
     ancestor_history = {}
 
+    # graph representation
     ancestor_adjacency = {}
+
     # loop through ancestors and store in dictionary with key being ancestor[1] and val being ancestor[0] 
     for ancestor in ancestors:
 
@@ -44,4 +42,3 @@ def earliest_ancestor(ancestors, starting_node):
     earliest_ancestor_helper(starting_node)
 
     return ancestor_history[max(ancestor_history)]
-
