@@ -39,7 +39,7 @@ def all_neighbor_rooms_visited(room, visited_rooms):
 
         next_room = room.get_room_in_direction(direction)
 
-        if next_room not in visited_rooms:
+        if next_room not in visited_rooms and next_room is not None:
             return False
     
     return True
@@ -99,10 +99,13 @@ def rooms_dft(starting_room, rooms, prev_room = None, visited = None):
 
         if x is not None:
             for d in x:
+                print('d', d)
                 player.travel(d)
                 traversal_path.append(d)
-
-                starting_room = player.current_room
+                
+        starting_room = player.current_room
+            
+        
     
     # ? format for room adjacency list
     # ? rooms[starting_room.id][1]
@@ -117,9 +120,13 @@ def rooms_dft(starting_room, rooms, prev_room = None, visited = None):
 
             next_room = player.current_room.get_room_in_direction(direction)
 
-            if next_room: 
-                player.travel(direction)
+            if next_room and next_room not in visited:
+
                 traversal_path.append(direction)
+                player.travel(direction)
+                rooms_dft(player.current_room, rooms, starting_room, visited)
+            
+            else:
                 rooms_dft(player.current_room, rooms, starting_room, visited)
 
 
@@ -128,10 +135,10 @@ player.current_room = world.starting_room
 
 rooms_dft(player.current_room, room_graph, player.current_room)
 
-print(traversal_path)
 # TRAVERSAL TEST
 visited_rooms = set()
 player.current_room = world.starting_room
+visited_rooms.add(player.current_room)
 
 for move in traversal_path:
     player.travel(move)
@@ -144,7 +151,6 @@ else:
     print(f"{len(room_graph) - len(visited_rooms)} unvisited rooms")
 
 
-# print(room_graph)
 
 #######
 # UNCOMMENT TO WALK AROUND
