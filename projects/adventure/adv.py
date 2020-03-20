@@ -117,9 +117,10 @@ def rooms_dft(starting_room, rooms, prev_room = None, visited = None):
 
             next_room = player.current_room.get_room_in_direction(direction)
 
-            player.travel(direction)
-            traversal_path.append(direction)
-            rooms_dft(player.current_room, rooms, starting_room, visited)
+            if next_room: 
+                player.travel(direction)
+                traversal_path.append(direction)
+                rooms_dft(player.current_room, rooms, starting_room, visited)
 
 
 
