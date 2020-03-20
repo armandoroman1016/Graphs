@@ -12,9 +12,9 @@ world = World()
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
-map_file = "maps/test_loop.txt"
+# map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -42,11 +42,43 @@ def all_neighbor_rooms_visited(room, visited_rooms):
         if next_room not in visited_rooms:
             return False
     
-    print('here', room.id)
     return True
 
-def find_closet_unexplored(current_room, prev_room):
-    pass
+def find_closet_unexplored(current_room, visited):
+
+    q = Queue()
+
+    directions = []
+    q.enqueue([current_room, directions])
+
+    explored = set()
+
+    while q.size():
+
+        path = q.dequeue()
+
+        last_room = path[0]
+
+        directions = path[-1]
+
+        if not last_room in explored:
+
+            explored.add(last_room)
+
+            if last_room not in visited:
+                return directions
+
+            exits = last_room.get_exits()
+
+            for direction in exits:
+
+                next_room = last_room.get_room_in_direction(direction)
+
+                if next_room:
+                    directions_copy = directions.copy()
+                    directions_copy.append(direction)
+                    q.enqueue([next_room, directions_copy])
+
 
 def rooms_dft(starting_room, rooms, prev_room = None, visited = None):
 
@@ -54,12 +86,23 @@ def rooms_dft(starting_room, rooms, prev_room = None, visited = None):
         visited = set()
     
     # ? base case
-    # if every neighbor has been visited return 
+    if len(visited) == len(room_graph):
+        return
+        
+    # if every neighbor has been visited 
     if all_neighbor_rooms_visited(starting_room, visited):
         # add node to visited
         visited.add(starting_room)
-        return
+
         # TODO write and call on backtrack function
+        x = find_closet_unexplored(starting_room, visited)
+
+        if x is not None:
+            for d in x:
+                player.travel(d)
+                traversal_path.append(d)
+
+                starting_room = player.current_room
     
     # ? format for room adjacency list
     # ? rooms[starting_room.id][1]
@@ -74,8 +117,8 @@ def rooms_dft(starting_room, rooms, prev_room = None, visited = None):
 
             next_room = player.current_room.get_room_in_direction(direction)
 
-            traversal_path.append(direction)
             player.travel(direction)
+            traversal_path.append(direction)
             rooms_dft(player.current_room, rooms, starting_room, visited)
 
 
