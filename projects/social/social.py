@@ -72,6 +72,17 @@ class SocialGraph:
             self.add_friendship(friendship[0], friendship[1])
 
 
+    # def populate_graph_linear(self, num_users, avg_friendships):
+
+    #     self.last_id = 0
+
+    #     self.users = {}
+
+    #     self.friendships = {}
+
+    #     for i in range(num)
+    #     pass
+
     def get_all_social_paths(self, user_id):
         """
         Takes a user's user_id as an argument
@@ -118,7 +129,7 @@ class SocialGraph:
 
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populate_graph(100, 3)
+    sg.populate_graph(100, 10)
     # print(sg.friendships)
     connections = sg.get_all_social_paths(1)
-    print(connections)
+    # print(connections)
